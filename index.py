@@ -1,24 +1,27 @@
+from robots.text import Text
+from robots.user_input import user_input
+
+class VideoMakerPython:
 
 
-def start():
-    content = {}
+    def __init__(self):
+        
 
-    def askAndReturnSearchTerm():
-        return input('Type a Wikepedia term: ')
+        self.user_input = user_input()
+        self.text = Text(self.user_input['searchTerm'])
 
-    def askAndReturnPrefix():
-        prefixes = ['Who is','What is','The history of']
-        choice = int(input(
-                """Which one do you choose:
-                    [1] Who is
-                    [2] What is 
-                    [3] The history of """))
+    def start(self):
 
-        return prefixes[choice - 1]
-
-    content['serchTerm'] = askAndReturnSearchTerm()
-    content['prefix'] = askAndReturnPrefix()
-    print(content)
+        
+        robots = {
+            'userInput': self.user_input,
+            'sourceContentOriginal': self.text.content,
+        }
+        
+        return robots
 
 
-start()
+if __name__ == '__main__':
+     video_maker = VideoMakerPython()
+     robo = video_maker.start()
+     print(robo)
