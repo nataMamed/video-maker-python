@@ -1,2 +1,12 @@
-# video-maker-python
-Automatizador de vídeos, inspirado no canal do Felipe Deschamps utilizando Python
+# Credential Format
+
+## Algorithmia
+
+File: `algorithmia.json`
+    
+```
+
+{
+    "apiKey": "YOUR_API_KEY"
+}
+´´´
