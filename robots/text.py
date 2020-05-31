@@ -11,7 +11,7 @@ from ibm_watson.natural_language_understanding_v1 import Features, KeywordsOptio
 class Text:
     
 
-    def __init__(self, search_term: str, maximum_sentences: int):
+    def __init__(self, search_term: str, maximum_sentences = 7):
 
         self.search_term = search_term
         self.limit_sentences = maximum_sentences

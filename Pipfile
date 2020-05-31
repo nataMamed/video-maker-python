@@ -6,9 +6,9 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-ibm-watson=="4.4.0"
-algorithmia=="1.3.0"
-pysbd=="0.2.3"
+ibm-watson = "==4.4.0"
+algorithmia = "==1.3.0"
+pysbd = "==0.2.3"
 
 [requires]
 python_version = "3.8"
