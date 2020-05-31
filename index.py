@@ -8,7 +8,7 @@ class VideoMakerPython:
         
 
         self.user_input = user_input()
-        self.text = Text(self.user_input['searchTerm'])
+        self.text = Text(self.user_input['searchTerm'],7)
 
     def start(self):
 
@@ -16,6 +16,8 @@ class VideoMakerPython:
         robots = {
             'userInput': self.user_input,
             'sourceContentOriginal': self.text.content,
+            'souceContentSanitized' : self.text.sanitized_content,
+            'sentences': self.text.break_into_sentences()
         }
         
         return robots
