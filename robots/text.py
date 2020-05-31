@@ -5,18 +5,22 @@ import pysbd
 from ibm_watson import NaturalLanguageUnderstandingV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from ibm_watson.natural_language_understanding_v1 import Features, KeywordsOptions
+from robots.state import save_content, load_content
+from robots.user_input import user_input
 
 
 
 class Text:
     
 
-    def __init__(self, search_term: str, maximum_sentences = 7):
+    def __init__(self, maximum_sentences = 7):
 
-        self.search_term = search_term
+        
+        self.user_input = load_content()
+        self.search_term = self.user_input['searchTerm']
         self.limit_sentences = maximum_sentences
         self.set_algorithmia_api_key()
-        self.set_wikipedia_content(search_term)
+        self.set_wikipedia_content(self.search_term)
         self.set_sanitized_content()
         self.set_watson_api_key_and_url()
 
@@ -100,6 +104,17 @@ class Text:
             sentences.append(content)
 
         return sentences
+
+    def start_robot(self):
+
+        content = {
+            "userInput": self.search_term,
+            "sourceContentOriginal": self.content,
+            "souceContentSanitized" : self.sanitized_content,
+            "sentences": self.break_into_sentences()
+        }
+
+        save_content(content)
     
             
             

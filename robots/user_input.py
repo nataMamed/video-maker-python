@@ -1,4 +1,4 @@
-
+from robots.state import save_content
 
 def user_input():
 
@@ -19,8 +19,11 @@ def user_input():
                 'searchTerm': input('Type a Wikepedia term: '),
                 'prefix': ask_and_return_prefix()
                 }
-
+        save_content(content)
         return content
 
-    return join_contents()
+    
+
+    
+
 
