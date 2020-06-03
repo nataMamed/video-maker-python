@@ -9,6 +9,11 @@ verify_ssl = true
 ibm-watson = "==4.4.0"
 algorithmia = "==1.3.0"
 pysbd = "==0.2.3"
+google-api-python-client = "==1.8.4"
+selenium = "*"
+requests2 = "*"
+bs4 = "*"
+google-images-download = "*"
 
 [requires]
 python_version = "3.8"
