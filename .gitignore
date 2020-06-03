@@ -131,8 +131,6 @@ dmypy.json
 # Credentials
 credentials/*.json
 
-# Test file
-robots/test.py
-
 # Contents
 content.json
+content/*jpg
