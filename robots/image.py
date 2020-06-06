@@ -1,4 +1,4 @@
-from state import load_content, save_content
+from robots.state import load_content, save_content
 import json
 from selenium import webdriver
 import time
@@ -57,7 +57,7 @@ class Image:
 
     def fetch_images_of_all_sentences(self):
 
-        self.make_file_if_not_exists()
+        #self.make_file_if_not_exists()
 
         search_term = self.content['userInput']['searchTerm']
         sentences = self.content['sentences']
@@ -70,10 +70,11 @@ class Image:
         save_content(self.content)
         return sentences
 
+    def start_robot(self):
+        self.fetch_images_of_all_sentences()
         
-if __name__=='__main__':
-    c = Image()
-    print(c.fetch_images_of_all_sentences())
+
+
 """
     def fetch_google_and_return_image_links(self, query):
 
