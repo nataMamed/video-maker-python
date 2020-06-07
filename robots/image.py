@@ -18,23 +18,22 @@ class Image:
 
         option = Options()
         option.headless = True
-        browser = webdriver.Chrome('C:\Program Files (x86)\chromedriver.exe', options=option)
-        browser.get('https://www.google.com/')
-        search =  browser.find_element_by_name('q')
+        driver = webdriver.Chrome('C:\Program Files (x86)\chromedriver.exe',options=option)
+        driver.get('https://www.google.com/')
+        search =  driver.find_element_by_name('q')
         search.send_keys(query, Keys.ENTER)
-        element = browser.find_element_by_link_text('Imagens')
+        element = driver.find_element_by_link_text('Imagens')
         element.get_attribute('href')
         element.click()
         time.sleep(1)
-        images = browser.find_element_by_id('islrg')
+        images = driver.find_element_by_id('islrg')
         time.sleep(2)
         images.find_element_by_tag_name('a').click()
         time.sleep(2)
-        element = browser.find_element_by_class_name('OUZ5W')
+        element = driver.find_element_by_class_name('OUZ5W')
         image = element.find_element_by_tag_name('img')
         src = image.get_attribute('src')
-        browser.quit()
-        self.download_image(query, src)
+        driver.quit()
         return src
 
     @staticmethod
@@ -44,16 +43,20 @@ class Image:
         except FileExistsError:
             pass
 
-    @staticmethod
-    def download_image(query, src):
-        try:
-            if src != None:
-                src  = str(src)    
-                urllib.request.urlretrieve(src, os.path.join('content',''.join(query.split())+'.jpg'))
-            else:
-                raise TypeError
-        except TypeError:
-            print('fail')
+    
+    def download_images(self):
+        
+        sentences = self.content['sentences']
+        for i, sentence in enumerate(sentences):
+            src = sentence['images']
+            try:
+                if src != None:
+                    src  = str(src)    
+                    urllib.request.urlretrieve(src, os.path.join('content',f'{i}original'+'.jpg'))
+                else:
+                    raise TypeError
+            except TypeError:
+                print('fail')
 
     def fetch_images_of_all_sentences(self):
 
@@ -72,6 +75,7 @@ class Image:
 
     def start_robot(self):
         self.fetch_images_of_all_sentences()
+        self.download_images()
         
 
 
