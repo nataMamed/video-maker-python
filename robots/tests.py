@@ -1,59 +1,91 @@
-from selenium import webdriver
-import time
-import urllib.request
-import os
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.chrome.options import Options
+from wand.image import Image
+from state import load_content
+import subprocess
 
-def fetch_google_and_download_image(query):
+content = load_content()['sentences']
+total_sentences = len(content)
 
-    option = Options()
-    option.headless = True
-    browser = webdriver.Chrome('C:\Program Files (x86)\chromedriver.exe', options=option)
-    browser.get('https://www.google.com/')
-    search =  browser.find_element_by_name('q')
-    search.send_keys(query, Keys.ENTER)
-    element = browser.find_element_by_link_text('Imagens')
-    element.get_attribute('href')
-    element.click()
-
-    images = browser.find_element_by_id('islrg')
-
-    time.sleep(2)
-    images.find_element_by_tag_name('a').click()
-    time.sleep(2)
-
-    element = browser.find_element_by_class_name('OUZ5W')
-    image = element.find_elements_by_tag_name('img')
-
-
-    srcs = []
-    for i in image[:2]:
-        breakpoint()
-        src = i.get_attribute('src')
-        srcs.append(src)
-    print(srcs)
-    # make_file_if_not_exists()
-    # download_image(query, src)
-    # browser.quit()
-
-def make_file_if_not_exists():
-    try:
-        os.mkdir('downloads')
-    except FileExistsError:
-        pass
-
-def download_image(query, src):
-    try:
-        if src != None:
-            src  = str(src)    
-            urllib.request.urlretrieve(src, os.path.join('downloads',''.join(query.split())+'.jpg'))
-        else:
-            raise TypeError
-    except TypeError:
-        print('fail')
-
+def resize_images():
     
+    for index in range(0, total_sentences):
+        command = f"magick content/{index}original.jpg\
+            -resize 1920x1080 \
+            content/{index}original.jpg"
+
+        subprocess.run(command, shell=True)
+
+def compose_images():
+    
+    for index in range(0,total_sentences):
+        with Image(filename=f'content/{index}original.jpg') as img:
+            with img.clone() as background:
+                background.resize(1920,1080)
+                background.blur(radius=0, sigma=10)
+
+                with Image(width=background.width, height=background.height) as imgcompose:
+                    #img.resize(int(img.width*1.5),int(img.height*1.5))
+                    imgcompose.composite(image=background, left=0,top=0)
+                    imgcompose.composite(image=img,operator='over', gravity='center')
+                    imgcompose.save(filename=f'content/{index}converted.jpg')
+        
+def create_sentence_image(sentence, sentence_index):
+
+    sentence = sentence
+    sentence_index = sentence_index
+    template_settings = {
+        0: {
+          'size': '1920x400',
+          'gravity': 'center'
+        },
+        1: {
+          'size': '1920x1080',
+          'gravity': 'center'
+        },
+        2: {
+          'size': '800x1080',
+          'gravity': 'west'
+        },
+        3: {
+          'size': '1920x400',
+          'gravity': 'center'
+        },
+        4: {
+          'size': '1920x1080',
+          'gravity': 'center'
+        },
+        5: {
+          'size': '800x1080',
+          'gravity': 'west'
+        },
+        6: {
+          'size': '1920x400',
+          'gravity': 'center'
+        }
+
+      }
+
+    size = template_settings[sentence_index]['size']
+    gravity =  template_settings[sentence_index]['gravity']
+
+    command =f'magick -size {size} \
+    -background transparent\
+    -gravity {gravity} \
+    -pointsize 50\
+    -fill white \
+    -kerning -1 \
+    caption:"{sentence}"\
+    content/{sentence_index}sentence.png'
+    try:
+        subprocess.run(command, shell=True)
+    except:
+        print('Something went wrong while running the command line')
+
+def start_robot():
+    resize_images()
+    compose_images()
+    
+    for index in range(0,total_sentences):
+        create_sentence_image(content[index]['text'], index)
 
 if __name__=='__main__':
-    fetch_google_and_download_image('Michael Jackson moonwalk')
+    start_robot()
