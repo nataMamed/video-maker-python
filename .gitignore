@@ -134,3 +134,4 @@ credentials/*.json
 # Contents
 content.json
 content/*jpg
+content/*.png

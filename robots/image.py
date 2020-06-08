@@ -52,7 +52,7 @@ class Image:
             try:
                 if src != None:
                     src  = str(src)    
-                    urllib.request.urlretrieve(src, os.path.join('content',f'{i}original'+'.jpg'))
+                    urllib.request.urlretrieve(src, os.path.join('content',f'{i}-original'+'.png'))
                 else:
                     raise TypeError
             except TypeError:
