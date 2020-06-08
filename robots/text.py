@@ -88,6 +88,8 @@ class Text:
     def start_robot(self):
 
         content = {
+            "maximumSentences":self.limit_sentences,
+            "searchTerm": self.user_input['searchTerm'],
             "userInput": self.user_input,
             "sourceContentOriginal": self.content,
             "souceContentSanitized" : self.sanitized_content,
